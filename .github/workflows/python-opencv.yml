@@ -1,0 +1,53 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        version: ["5.0.0-alpha", "4.10.0"]
+        dist: ["alpine", "debian", "ubuntu"]
+
+    steps:
+      - name: 签出代码
+        uses: actions/checkout@v4
+
+      - name: 登录腾讯云容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          registry: ccr.ccs.tencentyun.com
+          username: ${{ secrets.TENCENT_REGISTRY_USERNAME }}
+          password: ${{ secrets.TENCENT_REGISTRY_PASSWORD }}
+
+      - name: 登录 Docker 官方容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+
+      - name: 设置 Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 缓存 Docker 构建层
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx
+
+      - name: 构建镜像
+        run: |
+          docker buildx build \
+              --build-arg OPENCV_VERSION=${{ matrix.version }} \
+              --file python-opencv/Dockerfile.${{ matrix.dist }} \
+              --label image.source=OpenCV基础镜像 \
+              --label image.author=github.com/YangRucheng \
+              --platform linux/amd64,linux/arm64 \
+              --tag ccr.ccs.tencentyun.com/misaka-public/python-opencv:${{ matrix.dist }}-${{ matrix.version }} \
+              --tag docker.io/yangrucheng/python-opencv:${{ matrix.dist }}-${{ matrix.version }} \
+              --push .
