@@ -8,6 +8,7 @@
 | [OpenCV](https://hub.docker.com/repository/docker/yangrucheng/python-opencv)       | `python-opencv` | `ubuntu-5.0.0-alpha`、`alpine-4.10.0` | [gigante/python-opencv](https://github.com/gigante/python-opencv)       |
 | [AList](https://hub.docker.com/repository/docker/yangrucheng/alist)                | `alist`         | `pr-7844`                             | [AlistGo/alist](https://github.com/AlistGo/alist)                       |
 | [LightPicture](https://hub.docker.com/repository/docker/yangrucheng/light-picture) | `light-picture` | `install`、`latest`                   | [osuuu/LightPicture](https://github.com/osuuu/LightPicture)             |
+| [Ubuntu](#)                                                                        | `developer`     | `latest`                              |                                                                         |
 
 参考拉取命令：
 

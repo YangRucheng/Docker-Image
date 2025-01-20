@@ -1,0 +1,59 @@
+name: 构建 Ubuntu 镜像
+
+on:
+  push:
+    branches: [main]
+    paths: [ubuntu/**]
+  workflow_dispatch:
+    inputs:
+      root_passwd:
+        description: "Root 账号密码"
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: 安装 Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 登录腾讯云容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          registry: ccr.ccs.tencentyun.com
+          username: ${{ secrets.TENCENT_REGISTRY_USERNAME }}
+          password: ${{ secrets.TENCENT_REGISTRY_PASSWORD }}
+
+      - name: 登录阿里云容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          registry: registry.cn-guangzhou.aliyuncs.com
+          username: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
+          password: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+
+      - name: 登录 Docker 官方容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+
+      - name: 构建并推送多平台 Docker 镜像
+        run: |
+          cd ubuntu
+          docker buildx build \
+              --file Dockerfile \
+              --label image.source=Ubuntu基础开发环境 \
+              --platform linux/amd64,linux/arm64 \
+              --tag ccr.ccs.tencentyun.com/misaka-public/developer:latest \
+              --tag registry.cn-guangzhou.aliyuncs.com/misaka-public/developer:latest \
+              --tag docker.io/yangrucheng/developer:latest \
+              --build-arg ROOT_PASSWD=${{ github.event.inputs.root_passwd }} \
+              --push .
