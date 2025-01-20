@@ -1,0 +1,58 @@
+name: 构建 AList 镜像
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "AlistGo/alist 仓库的拉取请求编号"
+        required: true
+        type: number
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: 检出 AlistGo/alist 仓库代码
+        uses: actions/checkout@v4
+        with:
+          repository: AlistGo/alist
+
+      - name: 获取 AlistGo/alist PR 分支
+        run: |
+          git fetch origin pull/${{ github.event.inputs.pr_number }}/head:pr-${{ github.event.inputs.pr_number }}
+          git checkout pr-${{ github.event.inputs.pr_number }}
+
+      - name: 安装 QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: 安装 Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 登录腾讯云容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          registry: ccr.ccs.tencentyun.com
+          username: ${{ secrets.TENCENT_REGISTRY_USERNAME }}
+          password: ${{ secrets.TENCENT_REGISTRY_PASSWORD }}
+
+      - name: 登录 Docker 官方容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+
+      - name: 构建镜像
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          build-args: ""
+          tags: |
+            ccr.ccs.tencentyun.com/misaka-public/alist
+            docker.io/yangrucheng/alist
+            ccr.ccs.tencentyun.com/misaka-public/alist:pr-${{ github.event.inputs.pr_number }}
+            docker.io/yangrucheng/alist:pr-${{ github.event.inputs.pr_number }}
+          labels: image.source=AList镜像,image.author=github.com/YangRucheng
+          platforms: linux/amd64,linux/arm64
