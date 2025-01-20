@@ -40,6 +40,13 @@ jobs:
           username: ${{ secrets.TENCENT_REGISTRY_USERNAME }}
           password: ${{ secrets.TENCENT_REGISTRY_PASSWORD }}
 
+      - name: 登录阿里云容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          registry: registry.cn-guangzhou.aliyuncs.com
+          username: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
+          password: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+
       - name: 登录 Docker 官方容器镜像服务
         uses: docker/login-action@v3
         with:
@@ -56,6 +63,7 @@ jobs:
               --label image.source=LightPicture图床 \
               --platform linux/amd64,linux/arm64 \
               --tag ccr.ccs.tencentyun.com/misaka-public/light-picture:install \
+              --tag registry.cn-guangzhou.aliyuncs.com/misaka-public/light-picture:install \
               --tag docker.io/yangrucheng/light-picture:install \
               --push .
 
@@ -69,5 +77,6 @@ jobs:
               --label image.source=LightPicture图床 \
               --platform linux/amd64,linux/arm64 \
               --tag ccr.ccs.tencentyun.com/misaka-public/light-picture:latest \
+              --tag registry.cn-guangzhou.aliyuncs.com/misaka-public/light-picture:latest \
               --tag docker.io/yangrucheng/light-picture:latest \
               --push .

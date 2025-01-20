@@ -1,23 +1,27 @@
 # 自用基础 Docker 镜像
 
-## 使用
+## 镜像列表
 
-### Caddy
+| 镜像地址                                                                           | 镜像名称        | 镜像标签                              | 参考项目或上游项目                                                      |
+| ---------------------------------------------------------------------------------- | --------------- | ------------------------------------- | ----------------------------------------------------------------------- |
+| [Caddy](https://hub.docker.com/repository/docker/yangrucheng/caddy)                | `caddy`         | `cloudflare-dns`、`trojan`            | [caddyserver/caddy-docker](https://github.com/caddyserver/caddy-docker) |
+| [OpenCV](https://hub.docker.com/repository/docker/yangrucheng/python-opencv)       | `python-opencv` | `ubuntu-5.0.0-alpha`、`alpine-4.10.0` | [gigante/python-opencv](https://github.com/gigante/python-opencv)       |
+| [AList](https://hub.docker.com/repository/docker/yangrucheng/alist)                | `alist`         | `pr-7844`                             | [AlistGo/alist](https://github.com/AlistGo/alist)                       |
+| [LightPicture](https://hub.docker.com/repository/docker/yangrucheng/light-picture) | `light-picture` | `install`、`latest`                   | [osuuu/LightPicture](https://github.com/osuuu/LightPicture)             |
 
+参考拉取命令：
+
+Docker Hub
 ```bash
-docker pull yangrucheng/caddy:cloudflare-dns
+docker pull docker.io/yangrucheng/$IMAGE:$VERSION
 ```
 
+腾讯云容器镜像服务
 ```bash
-docker pull ccr.ccs.tencentyun.com/misaka-public/caddy:cloudflare-dns
+docker pull ccr.ccs.tencentyun.com/misaka-public/$IMAGE:$VERSION
 ```
 
-### Python-OpenCV
-
+阿里云容器镜像服务
 ```bash
-docker pull yangrucheng/python-opencv:alpine-4.10.0
-```
-
-```bash
-docker pull ccr.ccs.tencentyun.com/misaka-public/python-opencv:alpine-4.10.0
+docker pull registry.cn-guangzhou.aliyuncs.com/misaka-public/$IMAGE:$VERSION
 ```

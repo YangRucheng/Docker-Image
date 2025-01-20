@@ -24,6 +24,13 @@ jobs:
           username: ${{ secrets.TENCENT_REGISTRY_USERNAME }}
           password: ${{ secrets.TENCENT_REGISTRY_PASSWORD }}
 
+      - name: 登录阿里云容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          registry: registry.cn-guangzhou.aliyuncs.com
+          username: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
+          password: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+
       - name: 登录 Docker 官方容器镜像服务
         uses: docker/login-action@v3
         with:
@@ -49,5 +56,6 @@ jobs:
               --label image.author=github.com/YangRucheng \
               --platform linux/amd64,linux/arm64 \
               --tag ccr.ccs.tencentyun.com/misaka-public/caddy:${{ matrix.dist }} \
+              --tag registry.cn-guangzhou.aliyuncs.com/misaka-public/caddy:${{ matrix.dist }} \
               --tag docker.io/yangrucheng/caddy:${{ matrix.dist }} \
               --push .
