@@ -32,6 +32,8 @@ services:
     app:
         image: 'docker.io/yangrucheng/light-picture:install'
         container_name: LightPicture
+        volumes:
+            - '/home/Docker/LightPicture/env:/app/.env:ro'
         ports:
             - '80:80'
         restart: unless-stopped

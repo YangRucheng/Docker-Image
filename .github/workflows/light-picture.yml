@@ -17,11 +17,6 @@ jobs:
           repository: osuuu/LightPicture
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 下载文件
-        run: |
-          wget -o "nginx.conf" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/light-picture/nginx.conf"
-          wget -o "Dockerfile" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/light-picture/Dockerfile"
-
       - name: 设置 Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -53,13 +48,19 @@ jobs:
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
+      - name: 下载文件
+        run: |
+          wget -O "nginx.conf" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/light-picture/nginx.conf"
+          wget -O "Dockerfile.prod" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/light-picture/Dockerfile.prod"
+          wget -O "Dockerfile.install" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/light-picture/Dockerfile.install"
+
       - name: 文件目录结构
         run: tree -a -L 2
 
       - name: 构建并推送多平台 Docker 镜像（部署版）
         run: |
           docker buildx build \
-              --file ./Dockerfile \
+              --file Dockerfile.install \
               --label image.source=LightPicture图床 \
               --platform linux/amd64,linux/arm64 \
               --tag ccr.ccs.tencentyun.com/misaka-public/light-picture:install \
@@ -67,13 +68,10 @@ jobs:
               --tag docker.io/yangrucheng/light-picture:install \
               --push .
 
-      - name: 移除安装文件
-        run: rm -rf ./install
-
       - name: 构建并推送多平台 Docker 镜像（生产版）
         run: |
           docker buildx build \
-              --file Dockerfile \
+              --file Dockerfile.prod \
               --label image.source=LightPicture图床 \
               --platform linux/amd64,linux/arm64 \
               --tag ccr.ccs.tencentyun.com/misaka-public/light-picture:latest \
