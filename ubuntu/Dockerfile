@@ -15,8 +15,10 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/
     && sed -i 's/#Port 22/Port 1314/' /etc/ssh/sshd_config \
     && wget -O - https://cdn.jsdelivr.net/gh/YangRucheng/Config-Backup/init.sh | bash
 
+COPY entrypoint.sh /entrypoint.sh
+
 VOLUME [ "/home" ]
 
 EXPOSE 1314
 
-CMD ["entrypoint.sh"]
+ENTRYPOINT ["sh", "-c", "/entrypoint.sh"]
