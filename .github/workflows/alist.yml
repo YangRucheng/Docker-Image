@@ -18,10 +18,13 @@ jobs:
         with:
           repository: AlistGo/alist
 
-      - name: 获取 AlistGo/alist PR 分支
-        run: |
-          git fetch origin pull/${{ github.event.inputs.pr_number }}/head:pr-${{ github.event.inputs.pr_number }}
-          git checkout pr-${{ github.event.inputs.pr_number }}
+      - name: 缓存 Docker 构建层
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx
 
       - name: 安装 QEMU
         uses: docker/setup-qemu-action@v3
@@ -49,7 +52,7 @@ jobs:
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
-      - name: 构建镜像
+      - name: 构建主分支镜像
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -60,8 +63,24 @@ jobs:
             ccr.ccs.tencentyun.com/misaka-public/alist
             registry.cn-guangzhou.aliyuncs.com/misaka-public/alist
             docker.io/yangrucheng/alist
+          labels: image.source=AList镜像,image.author=github.com/YangRucheng
+          platforms: linux/amd64,linux/arm64
+
+      - name: 获取 AlistGo/alist PR 分支
+        run: |
+          git fetch origin pull/${{ github.event.inputs.pr_number }}/head:pr-${{ github.event.inputs.pr_number }}
+          git checkout pr-${{ github.event.inputs.pr_number }}
+
+      - name: 构建拉取请求分支镜像
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          build-args: ""
+          tags: |
             ccr.ccs.tencentyun.com/misaka-public/alist:pr-${{ github.event.inputs.pr_number }}
             registry.cn-guangzhou.aliyuncs.com/misaka-public/alist:pr-${{ github.event.inputs.pr_number }}
             docker.io/yangrucheng/alist:pr-${{ github.event.inputs.pr_number }}
-          labels: image.source=AList镜像,image.author=github.com/YangRucheng
+          labels: image.source=AList镜像(pr-${{ github.event.inputs.pr_number }}),image.author=github.com/YangRucheng
           platforms: linux/amd64,linux/arm64
