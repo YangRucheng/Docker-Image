@@ -7,6 +7,11 @@ on:
         description: "AlistGo/alist 仓库的拉取请求编号"
         required: true
         type: number
+      platforms:
+        description: "构建平台"
+        required: true
+        type: string
+        default: "linux/amd64,linux/arm64"
 
 jobs:
   build:
@@ -62,4 +67,4 @@ jobs:
             ccr.ccs.tencentyun.com/misaka-public/alist:pr-${{ github.event.inputs.pr_number }}
             registry.cn-guangzhou.aliyuncs.com/misaka-public/alist:pr-${{ github.event.inputs.pr_number }}
           labels: image.source=AList镜像,image.author=github.com/YangRucheng
-          platforms: linux/amd64
+          platforms: ${{ github.event.inputs.platforms }}
