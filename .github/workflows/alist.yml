@@ -3,26 +3,37 @@ name: 构建 AList 镜像
 on:
   workflow_dispatch:
     inputs:
-      pr_number:
-        description: "AlistGo/alist 仓库的拉取请求编号"
+      repository:
+        description: "alist 仓库"
         required: true
-        type: number
+        type: string
+        default: "AlistGo/alist"
+      ref:
+        description: "alist 仓库分支"
+        required: true
+        type: string
+        default: "refs/pull/7844/head"
       platforms:
         description: "构建平台"
         required: true
         type: string
-        default: "linux/amd64,linux/arm64"
+        default: "linux/amd64"
+      docker_tag:
+        description: "镜像 Tag"
+        required: true
+        type: string
+        default: "pr-7844"
 
 jobs:
   build:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: 检出 AlistGo/alist 仓库代码
+      - name: 检出 ${{ github.event.inputs.repository }} 仓库代码
         uses: actions/checkout@v4
         with:
-          repository: AlistGo/alist
-          ref: refs/pull/${{ github.event.inputs.pr_number }}/head
+          repository: ${{ github.event.inputs.repository }}
+          ref: ${{ github.event.inputs.ref }}
 
       - name: 安装 QEMU
         uses: docker/setup-qemu-action@v3
@@ -61,10 +72,10 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          build-args: "VERSION=自编译版 pr-${{ github.event.inputs.pr_number }}"
+          build-args: "VERSION=自编译版 ${{ github.event.inputs.repository }} ${{ github.event.inputs.ref }}"
           tags: |
-            docker.io/yangrucheng/alist:pr-${{ github.event.inputs.pr_number }}
-            ccr.ccs.tencentyun.com/misaka-public/alist:pr-${{ github.event.inputs.pr_number }}
-            registry.cn-guangzhou.aliyuncs.com/misaka-public/alist:pr-${{ github.event.inputs.pr_number }}
+            docker.io/yangrucheng/alist:${{ github.event.inputs.docker_tag }}
+            ccr.ccs.tencentyun.com/misaka-public/alist:${{ github.event.inputs.docker_tag }}
+            registry.cn-guangzhou.aliyuncs.com/misaka-public/alist:${{ github.event.inputs.docker_tag }}
           labels: image.source=AList镜像,image.author=github.com/YangRucheng
           platforms: ${{ github.event.inputs.platforms }}
