@@ -1,4 +1,4 @@
-name: 构建 CertMate 镜像
+name: 构建 CertiMate 镜像
 
 on:
   push:
@@ -56,7 +56,7 @@ jobs:
           push: true
           tags: |
             docker.io/yangrucheng/cert-mate:latest
-            ccr.ccs.tencentyun.com/misaka-public/cert-mate:latest
+            ccr.ccs.tencentyun.com/misaka-public/certi-mate:latest
             registry.cn-guangzhou.aliyuncs.com/misaka-public/cert-mate:latest
           labels: |
             image.source=CertMate镜像
