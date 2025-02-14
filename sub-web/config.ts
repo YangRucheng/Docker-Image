@@ -35,42 +35,72 @@ export const config: Config = {
                 {
                     label: "常用设备",
                     value:
-                        "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Full.ini",
+                        "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/config/ACL4SSR_Online_Full_AdblockPlus.ini",
                 },
                 {
                     label: "边缘设备",
                     value:
-                        "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Mini_NoAuto.ini",
-                }
+                        "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/config/ACL4SSR_Online_Mini_NoAuto.ini",
+                },
             ],
         },
         {
-            category: "ACL4SSR 规则",
+            category: "ACL4SSR 完整规则",
             items: [
                 {
                     label: "完整规则",
                     value:
-                        "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Full.ini",
+                        "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/config/ACL4SSR_Online_Full.ini",
                 },
                 {
-                    label: "基础规则",
+                    label: "无测速 完整规则",
                     value:
-                        "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online.ini",
+                        "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/config/ACL4SSR_Online_Full_NoAuto.ini",
+                },
+                {
+                    label: "去广告 完整规则",
+                    value:
+                        "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/config/ACL4SSR_Online_Full_AdblockPlus.ini",
+                },
+            ],
+        },
+        {
+            category: "ACL4SSR 精简规则",
+            items: [
+                {
+                    label: "精简规则",
+                    value:
+                        "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/config/ACL4SSR_Online_Mini.ini",
                 },
                 {
                     label: "无测速 精简规则",
                     value:
-                        "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Mini_NoAuto.ini",
+                        "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/config/ACL4SSR_Online_Mini_NoAuto.ini",
                 },
                 {
-                    label: "无测速 基础规则",
+                    label: "去广告 精简规则",
                     value:
-                        "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_NoAuto.ini",
+                        "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/config/ACL4SSR_Online_Mini_AdblockPlus.ini",
+                },
+            ],
+        },
+        {
+            category: "ACL4SSR 基础规则",
+            items: [
+                {
+                    label: "基础规则",
+                    value:
+                        "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/config/ACL4SSR_Online.ini",
+                },
+                {
+                    label: "无测速 精简规则",
+                    value:
+                        "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/config/ACL4SSR_Online_NoAuto.ini",
                 },
                 {
                     label: "去广告 基础规则",
                     value:
-                        "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_AdblockPlus.ini",
+                        "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/config/ACL4SSR_Online_AdblockPlus.ini",
                 },
             ],
         },
