@@ -57,5 +57,9 @@ docker pull registry.cn-guangzhou.aliyuncs.com/misaka-public/$IMAGE:$VERSION
 
 运行
 ```json
-systemctl daemon-reload && systemctl restart docker
+systemctl daemon-reload \
+&& systemctl stop docker.service \
+&& systemctl stop docker.socket \
+&& systemctl start docker.service \
+&& systemctl start docker.socket
 ```
