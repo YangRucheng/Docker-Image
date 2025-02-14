@@ -50,14 +50,18 @@ jobs:
             ${{ runner.os }}-buildx
 
       - name: 构建镜像
-        run: |
-          docker buildx build \
-              --build-arg OPENCV_VERSION=${{ matrix.version }} \
-              --file python-opencv/Dockerfile.${{ matrix.dist }} \
-              --label image.source=OpenCV基础镜像 \
-              --label image.author=github.com/YangRucheng \
-              --platform linux/amd64,linux/arm64 \
-              --tag ccr.ccs.tencentyun.com/misaka-public/python-opencv:${{ matrix.dist }}-${{ matrix.version }} \
-              --tag registry.cn-guangzhou.aliyuncs.com/misaka-public/python-opencv:${{ matrix.dist }}-${{ matrix.version }} \
-              --tag docker.io/yangrucheng/python-opencv:${{ matrix.dist }}-${{ matrix.version }} \
-              --push .
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: python-opencv/Dockerfile.${{ matrix.dist }}
+          push: true
+          build-args: OPENCV_VERSION=${{ matrix.version }}
+          tags: |
+            ccr.ccs.tencentyun.com/misaka-public/python-opencv:${{ matrix.dist }}-${{ matrix.version }}
+            registry.cn-guangzhou.aliyuncs.com/misaka-public/python-opencv:${{ matrix.dist }}-${{ matrix.version }}
+            docker.io/yangrucheng/python-opencv:${{ matrix.dist }}-${{ matrix.version }}
+          labels: |
+            image.source=OpenCV基础镜像
+            image.author=github.com/YangRucheng
+            image.version=${{ matrix.version }}
+          platforms: linux/amd64,linux/arm64

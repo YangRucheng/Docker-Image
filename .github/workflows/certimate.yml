@@ -56,7 +56,7 @@ jobs:
           push: true
           tags: |
             docker.io/yangrucheng/cert-mate:latest
-            ccr.ccs.tencentyun.com/misaka-public/certi-mate:latest
+            ccr.ccs.tencentyun.com/misaka-public/cert-mate:latest
             registry.cn-guangzhou.aliyuncs.com/misaka-public/cert-mate:latest
           labels: |
             image.source=CertMate镜像

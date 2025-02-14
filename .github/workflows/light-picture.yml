@@ -57,24 +57,32 @@ jobs:
       - name: 文件目录结构
         run: tree -a -L 2
 
-      - name: 构建并推送多平台 Docker 镜像（部署版）
-        run: |
-          docker buildx build \
-              --file Dockerfile.install \
-              --label image.source=LightPicture图床 \
-              --platform linux/amd64,linux/arm64 \
-              --tag ccr.ccs.tencentyun.com/misaka-public/light-picture:install \
-              --tag registry.cn-guangzhou.aliyuncs.com/misaka-public/light-picture:install \
-              --tag docker.io/yangrucheng/light-picture:install \
-              --push .
+      - name: 构建镜像（部署版）
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.install
+          push: true
+          tags: |
+            ccr.ccs.tencentyun.com/misaka-public/light-picture:install
+            registry.cn-guangzhou.aliyuncs.com/misaka-public/light-picture:install
+            docker.io/yangrucheng/light-picture:install
+          labels: |
+            image.source=LightPicture图床
+            image.author=github.com/YangRucheng
+          platforms: linux/amd64,linux/arm64
 
-      - name: 构建并推送多平台 Docker 镜像（生产版）
-        run: |
-          docker buildx build \
-              --file Dockerfile.prod \
-              --label image.source=LightPicture图床 \
-              --platform linux/amd64,linux/arm64 \
-              --tag ccr.ccs.tencentyun.com/misaka-public/light-picture:latest \
-              --tag registry.cn-guangzhou.aliyuncs.com/misaka-public/light-picture:latest \
-              --tag docker.io/yangrucheng/light-picture:latest \
-              --push .
+      - name: 构建镜像（部署版）
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.prod
+          push: true
+          tags: |
+            ccr.ccs.tencentyun.com/misaka-public/light-picture:latest
+            registry.cn-guangzhou.aliyuncs.com/misaka-public/light-picture:latest
+            docker.io/yangrucheng/light-picture:latest
+          labels: |
+            image.source=LightPicture图床
+            image.author=github.com/YangRucheng
+          platforms: linux/amd64,linux/arm64

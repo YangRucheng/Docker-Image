@@ -16,9 +16,6 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: 检出代码
-        uses: actions/checkout@v4
-
       - name: 安装 QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -45,15 +42,24 @@ jobs:
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
-      - name: 构建并推送多平台 Docker 镜像
+      - name: 下载文件
         run: |
-          cd ubuntu
-          docker buildx build \
-              --file Dockerfile \
-              --label image.source=Ubuntu基础开发环境 \
-              --platform linux/amd64,linux/arm64 \
-              --tag ccr.ccs.tencentyun.com/misaka-public/developer:latest \
-              --tag registry.cn-guangzhou.aliyuncs.com/misaka-public/developer:latest \
-              --tag docker.io/yangrucheng/developer:latest \
-              --build-arg ROOT_PASSWD=${{ github.event.inputs.root_passwd }} \
-              --push .
+          wget -O "Dockerfile" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/ubuntu/Dockerfile"
+          wget -O "entrypoint.sh" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/ubuntu/entrypoint.sh"
+          wget -O "ubuntu.sources" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/ubuntu/ubuntu.sources"
+
+      - name: 构建镜像
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          build-args: ROOT_PASSWD=${{ github.event.inputs.root_passwd }}
+          tags: |
+            ccr.ccs.tencentyun.com/misaka-public/developer:latest
+            registry.cn-guangzhou.aliyuncs.com/misaka-public/developer:latest
+            docker.io/yangrucheng/developer:latest
+          labels: |
+            image.source=Ubuntu基础开发环境
+            image.author=github.com/YangRucheng
+          platforms: linux/amd64,linux/arm64

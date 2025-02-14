@@ -52,13 +52,17 @@ jobs:
       - name: 文件目录结构
         run: tree -a -L 2
 
-      - name: 构建并推送多平台 Docker 镜像
-        run: |
-          docker buildx build \
-              --file Dockerfile \
-              --label image.source=订阅转换前端 \
-              --platform linux/amd64,linux/arm64 \
-              --tag ccr.ccs.tencentyun.com/misaka-public/sub-web:latest \
-              --tag registry.cn-guangzhou.aliyuncs.com/misaka-public/sub-web:latest \
-              --tag docker.io/yangrucheng/sub-web:latest \
-              --push .
+      - name: 构建镜像
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ccr.ccs.tencentyun.com/misaka-public/sub-web:latest
+            registry.cn-guangzhou.aliyuncs.com/misaka-public/sub-web:latest
+            docker.io/yangrucheng/sub-web:latest
+          labels: |
+            image.source=订阅转换前端
+            image.author=github.com/YangRucheng
+          platforms: linux/amd64,linux/arm64

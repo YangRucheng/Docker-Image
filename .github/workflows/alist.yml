@@ -77,5 +77,7 @@ jobs:
             docker.io/yangrucheng/alist:${{ github.event.inputs.docker_tag }}
             ccr.ccs.tencentyun.com/misaka-public/alist:${{ github.event.inputs.docker_tag }}
             registry.cn-guangzhou.aliyuncs.com/misaka-public/alist:${{ github.event.inputs.docker_tag }}
-          labels: image.source=AList镜像,image.author=github.com/YangRucheng
+          labels: |
+            image.source=AList镜像
+            image.author=github.com/YangRucheng
           platforms: ${{ github.event.inputs.platforms }}

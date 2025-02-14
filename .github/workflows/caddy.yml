@@ -49,13 +49,17 @@ jobs:
             ${{ runner.os }}-buildx
 
       - name: 构建镜像
-        run: |
-          docker buildx build \
-              --file caddy/Dockerfile.${{ matrix.dist }} \
-              --label image.source=Caddy镜像 \
-              --label image.author=github.com/YangRucheng \
-              --platform linux/amd64,linux/arm64 \
-              --tag ccr.ccs.tencentyun.com/misaka-public/caddy:${{ matrix.dist }} \
-              --tag registry.cn-guangzhou.aliyuncs.com/misaka-public/caddy:${{ matrix.dist }} \
-              --tag docker.io/yangrucheng/caddy:${{ matrix.dist }} \
-              --push .
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: caddy/Dockerfile.${{ matrix.dist }}
+          push: true
+          build-args: "VERSION=自编译版 ${{ github.event.inputs.repository }} ${{ github.event.inputs.ref }}"
+          tags: |
+            ccr.ccs.tencentyun.com/misaka-public/caddy:${{ matrix.dist }}
+            registry.cn-guangzhou.aliyuncs.com/misaka-public/caddy:${{ matrix.dist }}
+            docker.io/yangrucheng/caddy:${{ matrix.dist }}
+          labels: |
+            image.source=image.source=Caddy镜像
+            image.author=github.com/YangRucheng
+          platforms: linux/amd64,linux/arm64
