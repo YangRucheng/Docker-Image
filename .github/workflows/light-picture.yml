@@ -50,9 +50,12 @@ jobs:
 
       - name: 下载文件
         run: |
+          wget -O "php.ini" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/light-picture/php.ini"
           wget -O "nginx.conf" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/light-picture/nginx.conf"
           wget -O "Dockerfile.prod" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/light-picture/Dockerfile.prod"
           wget -O "Dockerfile.install" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/light-picture/Dockerfile.install"
+
+          mkdir app -p && wget -O "app/common.php" "https://github.com/YangRucheng/Docker-Image/raw/refs/heads/main/light-picture/common.php"
 
       - name: 文件目录结构
         run: tree -a -L 2
@@ -70,7 +73,7 @@ jobs:
           labels: |
             image.source=LightPicture图床
             image.author=github.com/YangRucheng
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
 
       - name: 构建镜像（部署版）
         uses: docker/build-push-action@v6
@@ -85,4 +88,4 @@ jobs:
           labels: |
             image.source=LightPicture图床
             image.author=github.com/YangRucheng
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
