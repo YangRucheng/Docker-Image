@@ -31,6 +31,13 @@ jobs:
           username: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
           password: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
 
+      - name: 登录 GitHub 容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: yangrucheng
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: 登录 Docker 官方容器镜像服务
         uses: docker/login-action@v3
         with:
@@ -56,9 +63,10 @@ jobs:
           push: true
           build-args: "VERSION=自编译版 ${{ github.event.inputs.repository }} ${{ github.event.inputs.ref }}"
           tags: |
+            ghcr.io/yangrucheng/caddy:${{ matrix.dist }}
+            docker.io/yangrucheng/caddy:${{ matrix.dist }}
             ccr.ccs.tencentyun.com/misaka-public/caddy:${{ matrix.dist }}
             registry.cn-guangzhou.aliyuncs.com/misaka-public/caddy:${{ matrix.dist }}
-            docker.io/yangrucheng/caddy:${{ matrix.dist }}
           labels: |
             image.source=image.source=Caddy镜像
             image.author=github.com/YangRucheng

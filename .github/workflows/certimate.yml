@@ -31,6 +31,13 @@ jobs:
           username: ${{ secrets.ALIYUN_REGISTRY_USERNAME }}
           password: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
 
+      - name: 登录 GitHub 容器镜像服务
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: yangrucheng
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: 登录 Docker 官方容器镜像服务
         uses: docker/login-action@v3
         with:
@@ -55,6 +62,7 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
+            ghcr.io/yangrucheng/cert-mate:latest
             docker.io/yangrucheng/cert-mate:latest
             ccr.ccs.tencentyun.com/misaka-public/cert-mate:latest
             registry.cn-guangzhou.aliyuncs.com/misaka-public/cert-mate:latest

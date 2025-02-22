@@ -13,12 +13,29 @@
 | [CertiMate](https://hub.docker.com/repository/docker/yangrucheng/cert-meta)        | `cert-mate`     | `latest`                              | [usual2970/certimate](https://github.com/usual2970/certimate)             |
 
 参考拉取命令：
-
-Docker Hub
 ```bash
 IMAGE=""
 VERSION="latest"
+```
+
+Docker Hub
+```bash
 docker pull yangrucheng/$IMAGE:$VERSION
+```
+
+Docker Hub 镜像站
+```bash
+docker pull docker.loricloud.cn/yangrucheng/$IMAGE:$VERSION
+```
+
+GitHub 容器注册表
+```bash
+docker pull ghrc.io/yangrucheng/$IMAGE:$VERSION
+```
+
+GitHub 容器镜像站
+```bash
+docker pull ghrc.loridocker.com/yangrucheng/$IMAGE:$VERSION
 ```
 
 腾讯云容器镜像服务
@@ -63,3 +80,9 @@ systemctl daemon-reload \
 && systemctl start docker.service \
 && systemctl start docker.socket
 ```
+
+## 许可证
+
+本仓库构建脚本使用 MIT 协议授权，该软件是按“原样”提供的，作者不对任何形式的损害负责。
+
+源代码许可证请参考对应仓库。
